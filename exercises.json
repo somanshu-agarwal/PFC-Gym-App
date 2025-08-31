@@ -1,0 +1,331 @@
+[
+  {
+    "id": 1,
+    "title": "Mindfulness Meditation",
+    "category": "Verified",
+    "duration": 10,
+    "description": "Sit comfortably; focus on breath; when attention wanders, gently return. Aim for non-judgmental awareness."
+  },
+  {
+    "id": 2,
+    "title": "Working Memory Training (n-back)",
+    "category": "Verified",
+    "duration": 10,
+    "description": "Use n-back style recall. Start with 1-back: say when current item matches the previous item. Increase difficulty gradually."
+  },
+  {
+    "id": 3,
+    "title": "Aerobic Exercise",
+    "category": "Verified",
+    "duration": 20,
+    "description": "Run, cycle, or brisk walk. Keep moderate intensity where you can talk but not sing."
+  },
+  {
+    "id": 4,
+    "title": "HIIT",
+    "category": "Verified",
+    "duration": 12,
+    "description": "Alternate 40s fast / 20s easy for 12 minutes. Warm up and cool down briefly."
+  },
+  {
+    "id": 5,
+    "title": "Sleep Optimization",
+    "category": "Verified",
+    "duration": 0,
+    "description": "Set a fixed sleep and wake time; dark, cool room; no screens 60 minutes before bed."
+  },
+  {
+    "id": 6,
+    "title": "Intermittent Fasting (12–16h)",
+    "category": "Verified",
+    "duration": 0,
+    "description": "Choose a daily eating window. Stay hydrated and avoid if contraindicated."
+  },
+  {
+    "id": 7,
+    "title": "Learn a New Language",
+    "category": "Verified",
+    "duration": 15,
+    "description": "Practice vocabulary, grammar, and speaking daily with a short session."
+  },
+  {
+    "id": 8,
+    "title": "Musical Instrument Practice",
+    "category": "Verified",
+    "duration": 15,
+    "description": "Practice scales, rhythm, and a song; focus on deliberate practice."
+  },
+  {
+    "id": 9,
+    "title": "Dual Tasking Walk",
+    "category": "Verified",
+    "duration": 10,
+    "description": "Walk while doing mental math or reciting poetry to engage working memory and attention."
+  },
+  {
+    "id": 10,
+    "title": "Reflective Journaling",
+    "category": "Verified",
+    "duration": 10,
+    "description": "Write about your day, decisions, and lessons learned; end with one improvement for tomorrow."
+  },
+  {
+    "id": 11,
+    "title": "Rule-Switching Game",
+    "category": "Experimental",
+    "duration": 5,
+    "description": "Create a task where the rule changes mid-way (e.g., clap on red, snap on blue, then swap)."
+  },
+  {
+    "id": 12,
+    "title": "Non-Dominant Hand Practice",
+    "category": "Experimental",
+    "duration": 5,
+    "description": "Use your non-dominant hand for brushing teeth, unlocking phone, or short writing practice."
+  },
+  {
+    "id": 13,
+    "title": "30-Second Creativity Burst",
+    "category": "Experimental",
+    "duration": 5,
+    "description": "List 5 new uses for a common object (spoon, brick, paperclip) under a time limit."
+  },
+  {
+    "id": 14,
+    "title": "Predictive Observation",
+    "category": "Experimental",
+    "duration": 5,
+    "description": "Silently predict the next actions of people nearby (e.g., 'she’ll check her phone next')."
+  },
+  {
+    "id": 15,
+    "title": "Story Forking",
+    "category": "Experimental",
+    "duration": 8,
+    "description": "Tell a story and change the plot every 20 seconds; keep it coherent."
+  },
+  {
+    "id": 16,
+    "title": "Cold Exposure + Mental Task",
+    "category": "Experimental",
+    "duration": 2,
+    "description": "Hold ice or take a cold shower while recalling a list or doing mental math. Stop if uncomfortable."
+  },
+  {
+    "id": 17,
+    "title": "Reverse Habits",
+    "category": "Experimental",
+    "duration": 5,
+    "description": "Change the order of routines (breakfast after walk; read before phone)."
+  },
+  {
+    "id": 18,
+    "title": "Micro-Adventure Route",
+    "category": "Experimental",
+    "duration": 10,
+    "description": "Take an unfamiliar path home; notice 5 novel details."
+  },
+  {
+    "id": 19,
+    "title": "Silent Digital Detox",
+    "category": "Experimental",
+    "duration": 30,
+    "description": "Set a 30–60 minute window of complete silence and no screens."
+  },
+  {
+    "id": 20,
+    "title": "Constraint Writing",
+    "category": "Experimental",
+    "duration": 8,
+    "description": "Write 8 sentences without the letter 'e' or with exactly 5 words per sentence."
+  },
+  {
+    "id": 21,
+    "title": "Blind Contour Drawing",
+    "category": "Creative",
+    "duration": 8,
+    "description": "Draw an object without looking at the paper; focus on lines and edges."
+  },
+  {
+    "id": 22,
+    "title": "Music Layer Tracking",
+    "category": "Creative",
+    "duration": 6,
+    "description": "Listen to a song and track two instruments separately in your mind."
+  },
+  {
+    "id": 23,
+    "title": "DIY Synesthesia",
+    "category": "Creative",
+    "duration": 6,
+    "description": "Assign colors to numbers/letters; visualize them while reading or counting."
+  },
+  {
+    "id": 24,
+    "title": "Guided Visualization Walk",
+    "category": "Creative",
+    "duration": 10,
+    "description": "Imagine walking through your home where each door opens into a new landscape."
+  },
+  {
+    "id": 25,
+    "title": "Opposite-View Debate",
+    "category": "Creative",
+    "duration": 10,
+    "description": "Argue against your own opinion on a topic; aim for a strong steelman case."
+  },
+  {
+    "id": 26,
+    "title": "Design a Ritual",
+    "category": "Creative",
+    "duration": 10,
+    "description": "Invent a personal ritual (morning cue, mantra, gesture) and perform it deliberately."
+  },
+  {
+    "id": 27,
+    "title": "Dream Journal",
+    "category": "Creative",
+    "duration": 5,
+    "description": "Record dreams upon waking; note emotions, places, patterns."
+  },
+  {
+    "id": 28,
+    "title": "Improv 'Yes, And...'",
+    "category": "Creative",
+    "duration": 10,
+    "description": "Do solo improv: speak aloud, never negating—always add ('yes, and...')."
+  },
+  {
+    "id": 29,
+    "title": "Yoga + Breath Counting",
+    "category": "Body+Brain",
+    "duration": 10,
+    "description": "Hold simple poses while counting breaths to 10; reset when you lose track."
+  },
+  {
+    "id": 30,
+    "title": "Martial Flow (Shadow)",
+    "category": "Body+Brain",
+    "duration": 10,
+    "description": "Slow shadow boxing or Tai Chi flow; focus on controlled transitions."
+  },
+  {
+    "id": 31,
+    "title": "Dance Pattern Memory",
+    "category": "Body+Brain",
+    "duration": 8,
+    "description": "Create a 6–8 step dance pattern and repeat it from memory."
+  },
+  {
+    "id": 32,
+    "title": "Balance + Recite",
+    "category": "Body+Brain",
+    "duration": 4,
+    "description": "Stand on one leg while reciting numbers backward from 50."
+  },
+  {
+    "id": 33,
+    "title": "Bouldering/Climbing Problem",
+    "category": "Body+Brain",
+    "duration": 20,
+    "description": "Attempt an easy bouldering route; plan moves before execution."
+  },
+  {
+    "id": 34,
+    "title": "Primal Movements",
+    "category": "Body+Brain",
+    "duration": 8,
+    "description": "Bear crawls, crab walks, and frog hops in a short circuit."
+  },
+  {
+    "id": 35,
+    "title": "tDCS Session (PFC montage)",
+    "category": "Biohacker",
+    "duration": 10,
+    "description": "Only if trained/cleared medically. Low current stimulation over dlPFC during tasks."
+  },
+  {
+    "id": 36,
+    "title": "Neurofeedback",
+    "category": "Biohacker",
+    "duration": 20,
+    "description": "Use a consumer EEG for attention training protocols if available."
+  },
+  {
+    "id": 37,
+    "title": "VR Cognitive Game",
+    "category": "Biohacker",
+    "duration": 10,
+    "description": "Use immersive VR puzzle/attention apps for added PFC load."
+  },
+  {
+    "id": 38,
+    "title": "Psychedelic-Assisted Mindfulness",
+    "category": "Biohacker",
+    "duration": 0,
+    "description": "Only where legal and medically supervised. Aim is to reset maladaptive loops."
+  },
+  {
+    "id": 39,
+    "title": "Hyperoxygenation Breathing",
+    "category": "Biohacker",
+    "duration": 5,
+    "description": "Cyclic deep breathing with brief retention; stop if dizzy."
+  },
+  {
+    "id": 40,
+    "title": "Novelty Food Day",
+    "category": "Biohacker",
+    "duration": 0,
+    "description": "Eat only new foods you rarely consume; note sensory experiences."
+  },
+  {
+    "id": 41,
+    "title": "Consistent Sleep/Wake",
+    "category": "Lifestyle",
+    "duration": 0,
+    "description": "Set fixed times; anchor with morning light exposure."
+  },
+  {
+    "id": 42,
+    "title": "Omega-3 Intake",
+    "category": "Lifestyle",
+    "duration": 0,
+    "description": "Include fish, flaxseed, or walnuts daily/weekly as per diet."
+  },
+  {
+    "id": 43,
+    "title": "Dark Chocolate (70%+)",
+    "category": "Lifestyle",
+    "duration": 0,
+    "description": "Enjoy a small square mindfully; avoid late-night caffeine."
+  },
+  {
+    "id": 44,
+    "title": "Green Tea Focus",
+    "category": "Lifestyle",
+    "duration": 0,
+    "description": "Use L-theanine + caffeine synergy for calm focus."
+  },
+  {
+    "id": 45,
+    "title": "Deep Social Conversation",
+    "category": "Lifestyle",
+    "duration": 20,
+    "description": "Have a meaningful chat about values/decisions instead of small talk."
+  },
+  {
+    "id": 46,
+    "title": "Volunteering Act",
+    "category": "Lifestyle",
+    "duration": 20,
+    "description": "Do one helpful act; reflect on impact."
+  },
+  {
+    "id": 47,
+    "title": "Nature Attention Walk",
+    "category": "Lifestyle",
+    "duration": 15,
+    "description": "Walk in nature; note 5 sights, 5 sounds, 5 textures."
+  }
+]

@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <title>PFC Gym</title>
+  <style>
+    :root{--pad:16px;--radius:14px;--shadow:0 10px 30px rgba(0,0,0,.08)}
+    *{box-sizing:border-box}html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:#0f1115;color:#e6e6e6}
+    header{position:sticky;top:0;background:#0f1115d9;backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid #23262f;padding:12px var(--pad);display:flex;gap:12px;align-items:center;z-index:10}
+    header h1{margin:0;font-size:18px;font-weight:700;letter-spacing:.3px}
+    #search{flex:1;background:#171923;border:1px solid #23262f;border-radius:999px;padding:10px 14px;color:#e6e6e6;outline:none}
+    #addCustom{padding:10px 14px;border-radius:999px;border:1px solid #2b6cb0;background:#1a365d;color:#d0e7ff;cursor:pointer}
+    main{padding:var(--pad);max-width:900px;margin:0 auto}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 18px}
+    .chip{border:1px solid #2b2f3a;background:#151822;padding:8px 12px;border-radius:999px;cursor:pointer;font-size:13px}
+    .chip.active{border-color:#7aa2f7;background:#1e293b;color:#e2eeff}
+    .card{background:#0f131a;border:1px solid #23262f;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin:12px 0}
+    .title{font-weight:700;margin:0 0 6px}
+    .meta{font-size:12px;color:#9aa4b2;margin-bottom:8px}
+    .desc{font-size:14px;line-height:1.5;color:#c9d1d9}
+    .actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+    button{border:1px solid #2a2f3a;background:#151b26;color:#e6e6e6;border-radius:12px;padding:10px 12px;cursor:pointer}
+    button.primary{background:#1d4ed8;border-color:#1d4ed8}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+    .footer{opacity:.7;text-align:center;padding:40px 16px;font-size:12px}
+    .pill{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid #2b2f3a;background:#121621;margin-left:8px}
+    .streak{font-weight:700}
+    .hidden{display:none}
+    .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111827;color:#e5e7eb;border:1px solid #374151;padding:10px 14px;border-radius:10px;opacity:0;transition:opacity .2s,transform .2s;z-index:100}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PFC Gym <span class="pill" id="streakPill">🔥 Streak: <span class="streak" id="streak">0</span> days</span></h1>
+    <input id="search" placeholder="Search exercises…">
+    <button id="addCustom" title="Add your own exercise">＋ Add</button>
+  </header>
+  <main>
+    <div class="toolbar">
+      <button class="chip active" data-filter="All">All</button>
+      <button class="chip" data-filter="Verified">Verified</button>
+      <button class="chip" data-filter="Experimental">Experimental</button>
+      <button class="chip" data-filter="Creative">Creative</button>
+      <button class="chip" data-filter="Body+Brain">Body+Brain</button>
+      <button class="chip" data-filter="Biohacker">Biohacker</button>
+      <button class="chip" data-filter="Lifestyle">Lifestyle</button>
+      <button id="randomBtn" class="chip">🎲 Random</button>
+      <button id="dailyPlanBtn" class="chip">📅 Daily Plan</button>
+      <button id="exportBtn" class="chip">⤓ Export</button>
+      <button id="importBtn" class="chip">⤒ Import</button>
+    </div>
+
+    <div id="plan" class="card hidden">
+      <div class="title">Today's Plan</div>
+      <div class="desc" id="planText"></div>
+      <div class="actions">
+        <button id="startTimer" class="primary">Start Focus Timer (10 min)</button>
+        <button id="completeDay">Mark Day Complete</button>
+        <button id="closePlan">Close</button>
+      </div>
+    </div>
+
+    <div id="list" class="grid"></div>
+
+    <div class="footer">
+      <div>For education only. Not medical advice. Avoid risky items if contraindicated. Customize freely.</div>
+      <div>Install as a PWA: open this site over HTTPS, then Add to Home Screen.</div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const state = {
+      data: [],
+      filter: 'All',
+      query: '',
+      timer: null,
+      timerEnd: null,
+      plan: [],
+    };
+
+    const $ = (sel)=>document.querySelector(sel);
+    const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
+
+    function toast(msg){
+      const t = $('#toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'), 1600);
+    }
+
+    async function loadData(){
+      try {
+        const local = localStorage.getItem('pfc_data');
+        if(local){
+          state.data = JSON.parse(local);
+        } else {
+          const res = await fetch('exercises.json');
+          state.data = await res.json();
+          localStorage.setItem('pfc_data', JSON.stringify(state.data));
+        }
+      } catch(e){
+        console.error(e);
+      }
+      render();
+    }
+
+    function saveData(){
+      localStorage.setItem('pfc_data', JSON.stringify(state.data));
+    }
+
+    function render(){
+      const list = $('#list');
+      const q = state.query.toLowerCase();
+      const items = state.data.filter(x => 
+        (state.filter==='All' || x.category===state.filter) &&
+        (x.title.toLowerCase().includes(q) || (x.description||'').toLowerCase().includes(q))
+      );
+      list.innerHTML = items.map(item => card(item)).join('');
+      attachCardHandlers();
+      updateStreak();
+    }
+
+    function card(item){
+      return \`
+      <div class="card" data-id="\${item.id}">
+        <div class="title">\${item.title}</div>
+        <div class="meta">\${item.category} • \${item.duration? item.duration + ' min' : 'habit'}</div>
+        <div class="desc">\${item.description||''}</div>
+        <div class="actions">
+          <button data-act="timer">Timer</button>
+          <button data-act="done">Done</button>
+          <button data-act="edit">Edit</button>
+          <button data-act="delete">Delete</button>
+        </div>
+      </div>\`;
+    }
+
+    function attachCardHandlers(){
+      $$('#list .card').forEach(card=>{
+        card.querySelectorAll('button').forEach(btn=>{
+          btn.addEventListener('click', (e)=>{
+            const id = parseInt(card.getAttribute('data-id'), 10);
+            const act = btn.getAttribute('data-act');
+            const item = state.data.find(x=>x.id===id);
+            if(act==='timer'){startTimer((item.duration||10)*60);}
+            if(act==='done'){markCompleted(item.title);}
+            if(act==='edit'){editItem(id);}
+            if(act==='delete'){deleteItem(id);}
+          });
+        });
+      });
+    }
+
+    function startTimer(seconds=600){
+      if(state.timer) clearInterval(state.timer);
+      state.timerEnd = Date.now() + seconds*1000;
+      const btn = $('#startTimer') || {textContent:''};
+      state.timer = setInterval(()=>{
+        const left = Math.max(0, state.timerEnd - Date.now());
+        const m = Math.floor(left/60000);
+        const s = Math.floor((left%60000)/1000);
+        btn.textContent = left>0 ? \`Focus Timer (\${m}:\${String(s).padStart(2,'0')})\` : 'Start Focus Timer (10 min)';
+        if(left<=0){ clearInterval(state.timer); toast('Time! Nice work.'); tryNotify('PFC Gym: Time!');}
+      }, 250);
+      toast('Timer started');
+    }
+
+    function markCompleted(title){
+      const today = new Date().toISOString().slice(0,10);
+      const log = JSON.parse(localStorage.getItem('pfc_log')||'{}');
+      if(!log[today]) log[today] = [];
+      log[today].push(title);
+      localStorage.setItem('pfc_log', JSON.stringify(log));
+      toast('Logged ✓ ' + title);
+      updateStreak();
+    }
+
+    function updateStreak(){
+      const log = JSON.parse(localStorage.getItem('pfc_log')||'{}');
+      const days = Object.keys(log).sort();
+      let streak = 0;
+      const today = new Date();
+      for(let i=0;i<3650;i++){
+        const d = new Date(today);
+        d.setDate(today.getDate()-i);
+        const key = d.toISOString().slice(0,10);
+        if(log[key] && log[key].length>0){ streak++; } else { break; }
+      }
+      $('#streak').textContent = streak;
+    }
+
+    function randomItem(){
+      const pool = state.data;
+      const pick = pool[Math.floor(Math.random()*pool.length)];
+      toast('Try: ' + pick.title);
+      state.query = pick.title;
+      $('#search').value = pick.title;
+      render();
+    }
+
+    function dailyPlan(){
+      const cats = ['Verified','Experimental','Creative','Body+Brain','Lifestyle'];
+      const picks = [];
+      cats.forEach(c=>{
+        const pool = state.data.filter(x=>x.category===c);
+        if(pool.length){ picks.push(pool[Math.floor(Math.random()*pool.length)]); }
+      });
+      // Include one wildcard
+      const wild = state.data[Math.floor(Math.random()*state.data.length)];
+      picks.push(wild);
+
+      state.plan = picks;
+      $('#planText').innerHTML = picks.map(x=>\`• \${x.title} (\${x.duration?x.duration+'m':'habit'})\`).join('<br>');
+      $('#plan').classList.remove('hidden');
+      toast('New plan ready');
+    }
+
+    function closePlan(){ $('#plan').classList.add('hidden'); }
+
+    function completeDay(){
+      markCompleted('Daily Plan');
+      toast('Day marked complete');
+    }
+
+    function editItem(id){
+      const item = state.data.find(x=>x.id===id);
+      const title = prompt('Title', item.title);
+      if(title===null) return;
+      const duration = prompt('Duration (minutes or 0 for habit)', item.duration||0);
+      if(duration===null) return;
+      const desc = prompt('Description', item.description||'');
+      if(desc===null) return;
+      const cat = prompt('Category (Verified/Experimental/Creative/Body+Brain/Biohacker/Lifestyle)', item.category);
+      if(cat===null) return;
+      Object.assign(item, {title, duration: parseInt(duration,10)||0, description: desc, category: cat});
+      saveData(); render(); toast('Updated');
+    }
+
+    function deleteItem(id){
+      if(!confirm('Delete this exercise?')) return;
+      state.data = state.data.filter(x=>x.id!==id);
+      saveData(); render(); toast('Deleted');
+    }
+
+    function addCustom(){
+      const title = prompt('Custom exercise title');
+      if(!title) return;
+      const duration = parseInt(prompt('Duration (minutes, 0 for habit)', '10')||'10',10);
+      const description = prompt('Description', '')||'';
+      const category = prompt('Category', 'Custom')||'Custom';
+      const id = Math.max(0,...state.data.map(x=>x.id))+1;
+      state.data.push({id,title,duration,description,category});
+      saveData(); render(); toast('Added');
+    }
+
+    async function exportData(){
+      const data = {
+        exercises: state.data,
+        log: JSON.parse(localStorage.getItem('pfc_log')||'{}')
+      };
+      const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'pfc_gym_export.json'; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importData(){
+      const input = document.createElement('input');
+      input.type = 'file'; input.accept = 'application/json';
+      input.onchange = async () => {
+        const file = input.files[0]; if(!file) return;
+        const text = await file.text();
+        try{
+          const data = JSON.parse(text);
+          if(Array.isArray(data.exercises)) { state.data = data.exercises; saveData(); }
+          if(data.log) localStorage.setItem('pfc_log', JSON.stringify(data.log));
+          render(); toast('Imported');
+        } catch(e){ alert('Invalid file'); }
+      };
+      input.click();
+    }
+
+    function tryNotify(msg){
+      if(!('Notification' in window)) return;
+      if(Notification.permission==='granted') new Notification(msg);
+      else if(Notification.permission!=='denied'){
+        Notification.requestPermission().then(p=>{ if(p==='granted') new Notification(msg); });
+      }
+    }
+
+    // Event wiring
+    window.addEventListener('load', ()=>{
+      loadData();
+      if('serviceWorker' in navigator){ navigator.serviceWorker.register('service-worker.js'); }
+    });
+    $('#search').addEventListener('input', e=>{ state.query = e.target.value; render(); });
+    $$('#.chip').forEach(chip=>{
+      chip.addEventListener('click', ()=>{
+        $$('#.chip').forEach(c=>c.classList.remove('active'));
+        chip.classList.add('active');
+        state.filter = chip.dataset.filter || state.filter;
+        if(chip.id==='randomBtn') randomItem();
+        else if(chip.id==='dailyPlanBtn') dailyPlan();
+        else if(chip.id==='exportBtn') exportData();
+        else if(chip.id==='importBtn') importData();
+        render();
+      });
+    });
+    $('#addCustom').addEventListener('click', addCustom);
+    $('#startTimer').addEventListener('click', ()=>startTimer(600));
+    $('#completeDay').addEventListener('click', completeDay);
+    $('#closePlan').addEventListener('click', closePlan);
+  </script>
+</body>
+</html>
